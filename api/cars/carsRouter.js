@@ -89,6 +89,21 @@ router.put("/:id", validateCarId, validateCar, (req, res) => {
     });
 });
 
+//* DELETE /:id - Delete a car by id.
+router.delete("/:id", validateCarId, (req, res) => {
+  const id = req.params.id;
+
+  carsDB.remove(id)
+    .then(count => {
+      res.status(200).json({ message: `${count} record(s) removed` });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Error removing car"
+      });
+    });
+});
+
 //MIDDLEWARE
 function validateCar(req, res, next) {
   const { vin, make, model, year, mileage } = req.body;
