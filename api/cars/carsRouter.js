@@ -38,8 +38,8 @@ router.get("/:id/sale", (req, res) => {
   const id = req.params.id;
   carsDB.getSaleWithCar(id)
     .then(data => {
-      if (data) {
-        res.status(200).json(data);
+      if (data.length > 0) {
+        res.status(200).json(data[0]);
       } else {
         res.status(404).json({ message: "car or sale data not found with specified car id" });
       }
