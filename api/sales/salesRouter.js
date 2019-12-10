@@ -53,7 +53,7 @@ router.post("/", validateSale, (req, res) => {
     .catch(error => {
 
       if (error.errno === 19) {
-        res.status(400).json({ message: "sale with specific VIN already exists in inventory!" });
+        res.status(400).json({ message: "sale with specific car id already exists" });
       } else {
         res.status(500).json({ message: "Error adding a sale" });
       }
