@@ -9,6 +9,7 @@ exports.up = function (knex) {
     tbl.boolean("sold").defaultTo(false);
     tbl.timestamp("soldAt").defaultTo(null);
     tbl.integer("carId")
+      .unique()
       .references("cars.carId")
       .onDelete("CASCADE");
   });
