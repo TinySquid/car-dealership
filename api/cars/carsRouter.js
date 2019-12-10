@@ -33,6 +33,22 @@ router.get("/:id", (req, res) => {
     });
 });
 
+//* GET /:id/sale - Returns sale information by car ID.
+router.get("/:id/sale", (req, res) => {
+  const id = req.params.id;
+  carsDB.getSaleWithCar(id)
+    .then(data => {
+      if (data) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({ message: "car or sale data not found with specified car id" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: "Error getting car & sale data" });
+    });
+});
+
 //* POST / - Adds a new car.
 router.post("/", validateCar, (req, res) => {
   const car = req.body;
