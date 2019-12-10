@@ -2,6 +2,7 @@ const knex = require('../../data/dbConfig');
 
 module.exports = {
   get,
+  getSaleWithCar,
   insert,
   update,
   remove
@@ -21,6 +22,15 @@ function get(carId) {
       .select("*")
       .from("cars");
   }
+}
+
+//? SELECT * FROM cars INNER JOIN sales ON cars.carId = sales.carId WHERE cars.carId = carId
+function getSaleWithCar(carId) {
+  return knex
+    .select("*")
+    .from("cars")
+    .innerJoin("sales", "cars.carId", "sales.carId")
+    .where({ "cars.carId": carId });
 }
 
 //? INSERT INTO cars (vin, make, model, year, mileage, [transmission, title]) VALUES(...car)
