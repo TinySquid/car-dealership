@@ -13,7 +13,6 @@ router.get("/", (req, res) => {
       }
     })
     .catch(error => {
-      console.log(error);
       res.status(500).json({ message: "Error getting cars" });
     });
 });
@@ -30,7 +29,6 @@ router.get("/:id", (req, res) => {
       }
     })
     .catch(error => {
-      console.log(error);
       res.status(500).json({ message: "Error getting car" });
     });
 });
@@ -47,19 +45,47 @@ router.post("/", validateCar, (req, res) => {
           res.status(201).json(car);
         })
         .catch(error => {
-          console.log(error);
           res.status(500).json({
             message: "Error getting car"
           });
         });
     })
     .catch(error => {
-      console.log(error);
+
       if (error.errno === 19) {
         res.status(400).json({ message: "Car with specific VIN already exists in inventory!" });
       } else {
         res.status(500).json({ message: "Error adding a car" });
       }
+    });
+});
+
+//* PUT /:id - Update a car by ID.
+router.put("/:id", validateCarId, validateCar, (req, res) => {
+  const id = req.params.id;
+  const changes = req.body;
+
+  carsDB.update(id, changes)
+    .then(count => {
+      if (count > 0) {
+        carsDB.get(id)
+          .then(car => {
+            //Send updated car back to client
+            res.status(201).json(car);
+          })
+          .catch(error => {
+            res.status(500).json({
+              message: "Error getting car"
+            });
+          });
+      } else {
+        res.status(404).json({ message: "Car not found" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Error updating car"
+      });
     });
 });
 
